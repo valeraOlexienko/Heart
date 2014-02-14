@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>I Love You</title>
+
+    <style>
+        #heart {
+            width: 110px;
+            height: 110px;
+            text-indent: 0px;
+
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+
+            margin: auto;
+        }
+
+        .heartPixel {
+            width: 10px;
+            height: 10px;
+            float: left;
+        }
+
+        .emptyPixel {
+            background-color: transparent;
+        }
+
+        .coloredPixel {
+            background-color: #ff4365;
+        }
+
+        .borderPixel {
+            background-color: #b2132b;
+        }
+
+        .borderShadowPixel {
+            background-color: #ed3e60;
+        }
+
+        #wordsContainer {
+            font-size: 40px;
+
+            width: 300px;
+            text-align: center;
+            margin: auto;
+
+            color: #b2132b;
+        }
+    </style>
+
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js" type="application/javascript"></script>
+    <script>
+        function buildHeart() {
+            var heartDiv = $('#heart');
+
+            var coords = [
+                [0, 0, 2, 2, 0, 0, 0, 2, 2, 0, 0],
+                [0, 2, 3, 3, 2, 0, 2, 3, 3, 2, 0],
+                [2, 3, 1, 1, 1, 2, 3, 1, 1, 1, 2],
+                [2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+                [2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+                [0, 2, 3, 1, 1, 1, 1, 1, 1, 2, 0],
+                [0, 0, 2, 3, 1, 1, 1, 1, 2, 0, 0],
+                [0, 0, 0, 2, 3, 1, 1, 2, 0, 0, 0],
+                [0, 0, 0, 0, 2, 3, 2, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0]
+            ]
+
+            var createDiv = function (cls) {
+                return $('<div class="heartPixel ' + cls + '"></div>');
+            }
+
+            for (var i in coords) {
+                var row = coords[i];
+                for (var j in row) {
+                    var n = row[j];
+                    if (n == 0) {
+                        heartDiv.append(createDiv('emptyPixel'));
+                    } else if (n == 1) {
+                        heartDiv.append(createDiv('coloredPixel'));
+                    } else if (n == 2) {
+                        heartDiv.append(createDiv('borderPixel'));
+                    } else if (n == 3) {
+                        heartDiv.append(createDiv('borderShadowPixel'));
+                    }
+                }
+            }
+        }
+
+        function animation(deg) {
+            $('#heart').animate({  textIndent: deg }, {
+                step: function (now) {
+                    var scale = Math.abs(now / 7);
+                    $(this).css('transform', 'rotate(' + now + 'deg) scale(' + scale + ',' + scale + ')');
+                },
+                duration: 2000,
+                done: function () {
+                    $(this).css('transform', 'rotate(0deg)');
+                    if (deg < 0) {
+                        animation(20);
+                    } else {
+                        animation(-20);
+                    }
+                }
+            }, 'linear');
+        }
+
+        var wordsCounter = 0;
+        var words = ['I', 'LOVE', 'YOU'];
+
+        $(document).ready(function () {
+            buildHeart();
+            animation(20);
+
+            $('#heart').click(function () {
+                var word = words[wordsCounter];
+                if (!word) word = '!';
+                $('#wordsContainer').text($('#wordsContainer').text() + ' ' + word);
+                wordsCounter ++;
+            });
+        });
+
+
+    </script>
+</head>
+<body>
+
+<div id="heart">
+    <!-- Will be generated -->
+</div>
+<div id="wordsContainer">
+    <!-- Will be generated -->
+</div>
+
+</body>
+</html>
